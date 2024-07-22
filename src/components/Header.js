@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleMenu } from '../utils/appSlice'
 import { YOUTUBE_SEARCH_API } from '../utils/constants';
@@ -11,6 +11,15 @@ const Header = () => {
     const searchCache = useSelector(store => store.search)
     const dispatch = useDispatch();
 
+    const getSearchSuggetions = useCallback(async () => {
+        const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
+        const json = await data.json();
+        setSuggestions(json[1])
+        dispatch(cacheResults({
+            [searchQuery]: json[1]
+        }))
+    }, [setSuggestions, dispatch, searchQuery])
+
     useEffect(() => {
         // debouncing with caching
         const timer = setTimeout(() => {
@@ -20,16 +29,7 @@ const Header = () => {
         return () => {
             clearTimeout(timer)
         }
-    }, [searchQuery])
-
-    const getSearchSuggetions = async () => {
-        const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
-        const json = await data.json();
-        setSuggestions(json[1])
-        dispatch(cacheResults({
-            [searchQuery]: json[1]
-        }))
-    }
+    }, [searchQuery, searchCache, getSearchSuggetions])
 
     const toggleMenuHandler = () => {
         dispatch(toggleMenu())

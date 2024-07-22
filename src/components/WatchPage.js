@@ -1,53 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { closeMenu } from '../utils/appSlice';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import CommentsContainer from './CommentsContainer';
 import LiveChat from './LiveChat';
-import { YOUTUBE_LIVE_CHAT_ID } from '../utils/constants';
-import { addMessage } from '../utils/chatSlice'
-import { YOUTUBE_LIVE_CHAT_MESSAGES } from '../utils/constants'
 
 const WatchPage = () => {
     const [searchParams] = useSearchParams();
     const videoId = searchParams.get("v");
     const dispatch = useDispatch();
     const liveChatId = useSelector(store => store?.chat?.liveChatId)
-    console.log("live chat id from lc"+ liveChatId)
 
     useEffect(() => {
         dispatch(closeMenu());
-    }, []);
-    
-    /* live chat messages code starts here
+    }, [dispatch]);
 
-    useEffect(() => {
-        // getLiveChatMessages()
-        const interval = setInterval(() => {
-            getLiveChatMessages()
-        }, 1500);
-        return () => {
-            clearInterval(interval);
-        }
-    }, [])
-
-    const getLiveChatMessages = async () => {
-        console.log("messages api " + YOUTUBE_LIVE_CHAT_MESSAGES(liveChatId))
-        const data = await fetch(YOUTUBE_LIVE_CHAT_MESSAGES(liveChatId));
-        const json = await data.json();
-        
-        json?.items?.map(item => dispatch(
-            addMessage({
-                name: item?.authorDetails?.displayName,
-                message: item?.snippet?.displayMessage || '',
-                imgUrl: item?.authorDetails?.profileImageUrl
-            })
-        ))
-    }
-
-    live chat messages code ends here */
-    
-  return (
+    return (
         <div className='flex flex-col '>
             <div className='px-5 flex'>
                 <div>
@@ -64,10 +32,10 @@ const WatchPage = () => {
                     </iframe>
                 </div>
                 <div className='w-full'>
-                    {liveChatId != '' ? <LiveChat /> : null}
+                    {liveChatId !== '' ? <LiveChat /> : null}
                 </div>
             </div>
-            {liveChatId === '' ? <CommentsContainer videoId={videoId} /> : null }
+            {liveChatId === '' ? <CommentsContainer videoId={videoId} /> : null}
         </div >
     )
 }

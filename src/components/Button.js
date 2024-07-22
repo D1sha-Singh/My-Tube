@@ -3,7 +3,7 @@ import { YOUTUBE_LIVE_VIDEOS, YOUTUBE_MOST_POPULAR_VIDEOS, YOUTUBE_VIDEOS_API } 
 import { VideoContext } from '../utils/helpers'
 
 const Button = (props) => {
-  const { videos, setVideos } = useContext(VideoContext);
+  const { setVideos } = useContext(VideoContext);
 
   const getVideos = async () => {
     let data;      
@@ -13,7 +13,6 @@ const Button = (props) => {
       data = await fetch(YOUTUBE_MOST_POPULAR_VIDEOS);
     else data = await fetch(YOUTUBE_VIDEOS_API);
     const json = await data.json();
-    console.log("data live " + json?.items);
     setVideos(json?.items);
   }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 import ChatMessage from './ChatMessage'
 import { useDispatch, useSelector } from 'react-redux'
 import { addMessage } from '../utils/chatSlice'
@@ -9,21 +9,8 @@ const LiveChat = () => {
     const dispatch = useDispatch();
     const chatMessages = useSelector(store => store?.chat?.messages)
     const liveChatId = useSelector(store => store?.chat?.liveChatId)
-    console.log("live chat id from lc"+ liveChatId)
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            getLiveChatMessages()
-            console.log('renders')
-        }, 1500);
-        return () => {
-            clearInterval(interval);
-            console.log('cleanup')
-        }
-    }, [liveChatId])
-
-    const getLiveChatMessages = async () => {
-        console.log("messages api " + YOUTUBE_LIVE_CHAT_MESSAGES(liveChatId))
+    
+    const getLiveChatMessages = useCallback(async () => {
         const data = await fetch(YOUTUBE_LIVE_CHAT_MESSAGES(liveChatId));
         const json = await data.json();
         
@@ -34,7 +21,19 @@ const LiveChat = () => {
                 imgUrl: item?.authorDetails?.profileImageUrl
             })
         ))
-    }
+    }, [liveChatId, dispatch])
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            getLiveChatMessages()
+            console.log('renders')
+        }, 1500);
+        return () => {
+            clearInterval(interval);
+            console.log('cleanup')
+        }
+    }, [liveChatId, getLiveChatMessages])
+
 
     return (
         <>
