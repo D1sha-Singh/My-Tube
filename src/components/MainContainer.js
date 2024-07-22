@@ -1,12 +1,32 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux';
+import { YOUTUBE_VIDEOS_API } from '../utils/constants'
 import ButtontList from './ButtonList'
 import VideoContainer from './VideoContainer'
+import { VideoContext } from '../utils/helpers';
 
 const MainContainer = () => {
+  const [videos, setVideos] = useState([]);
+  const value = { videos, setVideos }
+
+  useEffect(() => {
+    getVideos();
+  }, []);
+
+  const getVideos = async () => {
+    console.log(YOUTUBE_VIDEOS_API)
+    const data = await fetch(YOUTUBE_VIDEOS_API);
+    const json = await data.json();
+    // console.log("video"+json.items);
+    setVideos(json.items);
+  }
+  console.log(videos)
   return (
     <div>
-        <ButtontList />
-        <VideoContainer />
+    <VideoContext.Provider value={value} >
+      <ButtontList />
+      <VideoContainer />
+    </VideoContext.Provider>
     </div>
   )
 }

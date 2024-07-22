@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { YOUTUBE_COMMENTS_API } from '../utils/constants';
+import CommentsList from './CommentsList';
 
 const commentsData = [
     {
@@ -141,37 +143,23 @@ const commentsData = [
     }
 ]
 
-const Comment = ({ comment }) => {
-    return (
-        <div className='flex shadow-sm bg-gray-100 p-2 rounded-lg my-2'>
-            <img
-                className='w-12 h-12'
-                alt="user-icon" src="https://www.iconpacks.net/icons/2/free-user-icon-3296-thumb.png" />
+const CommentsContainer = ({ videoId }) => {
+    const [commentsData, setCommentsData] = useState([]);
 
-            <div className='px-3'>
-                <p className='font-bold'>{comment.name}</p>
-                <p>{comment.text}</p>
-            </div>
+    useEffect(() => {
+        getComments();
+    }, []);
 
-        </div>
-    )
-}
+    const getComments = async () => {
+        console.log("comments api " + YOUTUBE_COMMENTS_API(videoId))
+        const data = await fetch(YOUTUBE_COMMENTS_API(videoId))
+        const json = await data.json();
+        setCommentsData(json?.items || [])
+        // console.log("disha comments data " + json?.items || [])
+    }
 
-const CommentsList = ({ commentsData }) => {
-    return commentsData.map((item, index) => (
-        <div>
-            <Comment comment={item} key={index} />
-            <div className='pl-5 border border-l-black'>
-                <CommentsList key={index} commentsData={item.replies} />
-            </div>
-        </div>
-    ))
-}
-
-const CommentsContainer = () => {
     return (
         <div className='m-5 p-2'>
-            <h1 className='px-5 py-3 font-bold text-2xl'>Comments:</h1>
             <CommentsList commentsData={commentsData} />
         </div>
     )

@@ -2,25 +2,39 @@ import React, { useEffect, useState } from 'react'
 import ChatMessage from './ChatMessage'
 import { useDispatch, useSelector } from 'react-redux'
 import { addMessage } from '../utils/chatSlice'
+import { YOUTUBE_LIVE_CHAT_MESSAGES } from '../utils/constants'
 
 const LiveChat = () => {
     const [liveMessage, setLiveMessage] = useState('');
     const dispatch = useDispatch();
-    const chatMessages = useSelector(store => store.chat.messages)
+    const chatMessages = useSelector(store => store?.chat?.messages)
+    const liveChatId = useSelector(store => store?.chat?.liveChatId)
+    console.log("live chat id from lc"+ liveChatId)
 
     useEffect(() => {
         const interval = setInterval(() => {
-            dispatch(
-                addMessage({
-                    name: 'Disha Singh Ji',
-                    message: 'Thank you being a good teacher Akshay!💕'
-                })
-            )
+            getLiveChatMessages()
+            console.log('renders')
         }, 1500);
         return () => {
             clearInterval(interval);
+            console.log('cleanup')
         }
-    }, [])
+    }, [liveChatId])
+
+    const getLiveChatMessages = async () => {
+        console.log("messages api " + YOUTUBE_LIVE_CHAT_MESSAGES(liveChatId))
+        const data = await fetch(YOUTUBE_LIVE_CHAT_MESSAGES(liveChatId));
+        const json = await data.json();
+        
+        json?.items?.map(item => dispatch(
+            addMessage({
+                name: item?.authorDetails?.displayName,
+                message: item?.snippet?.displayMessage || '',
+                imgUrl: item?.authorDetails?.profileImageUrl
+            })
+        ))
+    }
 
     return (
         <>
@@ -30,6 +44,7 @@ const LiveChat = () => {
                     key={index.toString()}
                     name={chat.name}
                     message={chat.message}
+                    imgUrl={chat.imgUrl}
                 />)
                 }
             </div>
@@ -40,7 +55,8 @@ const LiveChat = () => {
                     dispatch(
                         addMessage({
                             name: 'Disha Singh Ji',
-                            message: liveMessage
+                            message: liveMessage,
+                            imgUrl: ''
                         })
                     )
                 }}
@@ -49,7 +65,7 @@ const LiveChat = () => {
                     className='w-96 px-2'
                     type='text'
                     value={liveMessage}
-                    onChange={(e)=> setLiveMessage(e.target.value)}
+                    onChange={(e) => setLiveMessage(e.target.value)}
                 />
                 <button className='px-2 mx-2 bg-green-100'> Send</button>
             </form>
