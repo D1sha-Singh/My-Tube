@@ -157,7 +157,8 @@ const CommentsContainer = ({ videoId }) => {
     }, [getComments]);
 
     return (
-        <div className='m-5 p-2'>
+        <div className='m-5 p-2 w-8/12'>
+            <h1 className='flex gap-4 my-4 px-5 py-3 font-bold text-2xl'>Comments:</h1>
             <CommentsList commentsData={commentsData} />
         </div>
     )

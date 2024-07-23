@@ -4,6 +4,7 @@ import { closeMenu } from '../utils/appSlice';
 import { useSearchParams } from 'react-router-dom';
 import CommentsContainer from './CommentsContainer';
 import LiveChat from './LiveChat';
+import { SearchResultsPage } from './SearchResultsPage';
 
 const WatchPage = () => {
     const [searchParams] = useSearchParams();
@@ -16,7 +17,7 @@ const WatchPage = () => {
     }, [dispatch]);
 
     return (
-        <div className='flex flex-col '>
+        <div className='md:flex md:flex-wrap md:justify-center md:w-full mt-4'>
             <div className='px-5 flex'>
                 <div>
                     <iframe
@@ -30,12 +31,13 @@ const WatchPage = () => {
                         referrerPolicy="strict-origin-when-cross-origin"
                         allowFullScreen>
                     </iframe>
+                    {liveChatId === '' ? <CommentsContainer videoId={videoId} /> : null}
                 </div>
-                <div className='w-full'>
-                    {liveChatId !== '' ? <LiveChat /> : null}
+                <div className='hidden md:block w-1/4  rounded-xl border h-[30rem] shadow-sm'>
+                    {liveChatId !== '' ? <LiveChat /> : <SearchResultsPage source={'WatchPage'} />}
                 </div>
             </div>
-            {liveChatId === '' ? <CommentsContainer videoId={videoId} /> : null}
+            
         </div >
     )
 }

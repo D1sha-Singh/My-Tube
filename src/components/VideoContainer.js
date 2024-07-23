@@ -1,10 +1,11 @@
 import React, { useContext } from 'react'
-import { YOUTUBE_LIVE_CHAT_ID } from '../utils/constants'
+import { YOUTUBE_LIVE_CHAT_ID, YOUTUBE_SEARCH_RESULT_API } from '../utils/constants'
 import VideoCard from './VideoCard';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setLiveChatId } from '../utils/chatSlice'
 import { VideoContext } from '../utils/helpers';
+import { setVideos } from '../utils/videosSlice';
 
 const VideoContainer = () => {
   const { videos } = useContext(VideoContext);
@@ -21,12 +22,23 @@ const VideoContainer = () => {
     return video?.id;
   }
 
-  return (
-    <div className='flex flex-wrap'>
-      {videos && videos.map(video => {
+  const getSearchResults = async (video) => {
+    const data = await fetch(YOUTUBE_SEARCH_RESULT_API + video?.snippet?.tags[0]);
+    const json = await data.json();
+    console.log('disha json ', json?.items)
+    dispatch(setVideos(json?.items ?? []));
+}
 
+  const getRequiredData = (video) => {
+    getLiveVideoId(getVideoId(video));
+    getSearchResults(video);
+  }
+
+  return (
+    <div className='md:flex md:flex-wrap md:justify-center'>
+      {videos && videos.map(video => {
         console.log('disha video ' + video)
-        return (<Link to={"/watch?v=" + getVideoId(video)} onClick={() => getLiveVideoId(getVideoId(video))}>
+        return (<Link to={"/watch?v=" + getVideoId(video)} onClick={() => getRequiredData(video)}>
           <VideoCard key={video.id} info={video} />
         </Link>)
       }

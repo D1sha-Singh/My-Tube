@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { toggleMenu } from '../utils/appSlice'
-import { YOUTUBE_SEARCH_API } from '../utils/constants';
+import { YOUTUBE_SEARCH_API, YOUTUBE_SEARCH_RESULT_API } from '../utils/constants';
 import { cacheResults } from '../utils/searchSlice'
+import { setVideos } from '../utils/videosSlice'
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -10,6 +12,7 @@ const Header = () => {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const searchCache = useSelector(store => store.search)
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const getSearchSuggetions = useCallback(async () => {
         const data = await fetch(YOUTUBE_SEARCH_API + searchQuery);
@@ -35,6 +38,14 @@ const Header = () => {
         dispatch(toggleMenu())
     }
 
+    const getSearchResults = async () => {
+        const data = await fetch(YOUTUBE_SEARCH_RESULT_API + searchQuery);
+        const json = await data.json();
+        console.log('disha json ', json?.items)
+        dispatch(setVideos(json?.items ?? []));
+        navigate(`results/?search_query=${searchQuery}`);
+    }
+
     return (
         <div className="grid grid-flow-col p-2 m-2 shadow-lg">
             <div className='flex col-span-1'>
@@ -58,13 +69,13 @@ const Header = () => {
                         onBlur={() => setShowSuggestions(false)}
                         type='text' />
                     <button
-                        className="border border-gray-400 py-2 px-5 rounded-r-full bg-gray-100">🔍</button>
+                        className="border border-gray-400 py-2 px-5 rounded-r-full bg-gray-100" onClick={getSearchResults}>🔍</button>
                 </div>
                 {showSuggestions &&
                     <div className='fixed bg-white py-2 px-5 w-[37rem] shadow-lg rounded-lg border border-gray-100'>
                         <ul>
                             {suggestions.map((item, idx) =>
-                                <li key={idx} className='py-2 px-3 shadow-sm hover: bg-gray-100'>
+                                <li key={idx} className='py-2 px-3 shadow-sm hover: bg-gray-100' onClick={() => getSearchResults}>
                                     🔍{item}
                                 </li>
                             )}

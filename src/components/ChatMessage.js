@@ -2,7 +2,7 @@ import React from 'react'
 
 const ChatMessage = ({ name, message, imgUrl }) => {
     return (
-        <div className='flex items-center'>
+        <div className='flex items-center gap-2  p-2 '>
             <img
                 className='h-8'
                 alt="user-icon" src={imgUrl} />

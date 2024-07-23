@@ -53,7 +53,7 @@ const LiveChat = () => {
                     e.preventDefault()
                     dispatch(
                         addMessage({
-                            name: 'Disha Singh Ji',
+                            name: 'Disha Singh',
                             message: liveMessage,
                             imgUrl: ''
                         })

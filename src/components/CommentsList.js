@@ -9,7 +9,6 @@ const CommentsList = ({ commentsData }) => {
         const { snippet: snippetObj } = topLevelComment || {}
         return (
             <div>
-                <h1 className='px-5 py-3 font-bold text-2xl'>Comments:</h1>
                 <Comment comment={snippetObj} key={index} />
                 {/* <div className='pl-5 border border-l-black'>
                     <CommentsList key={index} commentsData={item.replies} />
