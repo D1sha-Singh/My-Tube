@@ -46,6 +46,10 @@ const Header = () => {
         navigate(`results/?search_query=${searchQuery}`);
     }
 
+    const handleClick = (item) => {
+        setSearchQuery((item) => getSearchResults(item));
+    }
+
     return (
         <div className="grid grid-flow-col p-2 m-2 shadow-lg">
             <div className='flex col-span-1'>
@@ -72,15 +76,22 @@ const Header = () => {
                         className="border border-gray-400 py-2 px-5 rounded-r-full bg-gray-100" onClick={getSearchResults}>🔍</button>
                 </div>
                 {showSuggestions &&
-                    <div className='fixed bg-white py-2 px-5 w-[37rem] shadow-lg rounded-lg border border-gray-100'>
+                    <div className='absolute bg-white py-2 px-5 w-[37rem] shadow-lg rounded-lg border border-gray-500'>
                         <ul>
                             {suggestions.map((item, idx) =>
-                                <li key={idx} className='py-2 px-3 shadow-sm hover: bg-gray-100' onClick={() => getSearchResults}>
+                            (
+                                <li
+                                    key={idx}
+                                    className="py-2 shadow-sm bg-white hover:bg-gray-200 cursor-pointer"
+                                    onClick={() => handleClick(item)}
+                                >
                                     🔍{item}
-                                </li>
+                                </li>)
                             )}
+
                         </ul>
-                    </div>}
+                    </div>
+                }
             </div>
             <div className='col-span-1'>
                 <img

@@ -41,9 +41,9 @@ const LiveChat = () => {
                 {chatMessages.map((chat, index) => <ChatMessage
                     // do not use indexes as keys
                     key={index.toString()}
-                    name={chat.name}
-                    message={chat.message}
-                    imgUrl={chat.imgUrl}
+                    name={chat?.name}
+                    message={chat?.message}
+                    imgUrl={chat?.imgUrl}
                 />)
                 }
             </div>

@@ -33,7 +33,7 @@ const WatchPage = () => {
                     </iframe>
                     {liveChatId === '' ? <CommentsContainer videoId={videoId} /> : null}
                 </div>
-                <div className='hidden md:block w-1/4  rounded-xl border h-[30rem] shadow-sm'>
+                <div className='hidden md:block w-3/4   h-[30rem] shadow-sm'>
                     {liveChatId !== '' ? <LiveChat /> : <SearchResultsPage source={'WatchPage'} />}
                 </div>
             </div>
