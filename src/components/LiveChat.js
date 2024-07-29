@@ -26,11 +26,9 @@ const LiveChat = () => {
     useEffect(() => {
         const interval = setInterval(() => {
             getLiveChatMessages()
-            console.log('renders')
         }, 1500);
         return () => {
             clearInterval(interval);
-            console.log('cleanup')
         }
     }, [liveChatId, getLiveChatMessages])
 

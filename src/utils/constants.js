@@ -16,4 +16,6 @@ export const YOUTUBE_COMMENTS_API = (videoId) => `https://youtube.googleapis.com
 
 export const YOUTUBE_SEARCH_RESULT_API = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&key=" + GOOGLE_API_KEY + "&q=";
 
+export const YOUTUBE_CHANNEL_API = (channelId) => `https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&id=${channelId}&key=` + GOOGLE_API_KEY
+
 export const OFFSET_LIVE_CHAT = 10;

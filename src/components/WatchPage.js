@@ -8,6 +8,7 @@ import { SearchResultsPage } from './SearchResultsPage';
 
 const WatchPage = () => {
     const [searchParams] = useSearchParams();
+    const themeDark = useSelector(store => store?.theme?.themeDark)
     const videoId = searchParams.get("v");
     const dispatch = useDispatch();
     const liveChatId = useSelector(store => store?.chat?.liveChatId)
@@ -17,7 +18,7 @@ const WatchPage = () => {
     }, [dispatch]);
 
     return (
-        <div className='md:flex md:flex-wrap md:justify-center md:w-full mt-4'>
+        <div className={`md:flex md:flex-wrap md:justify-center md:w-full mt-20 ${themeDark ? 'bg-black' : 'none'}`}>
             <div className='px-5 flex'>
                 <div>
                     <iframe
@@ -33,7 +34,7 @@ const WatchPage = () => {
                     </iframe>
                     {liveChatId === '' ? <CommentsContainer videoId={videoId} /> : null}
                 </div>
-                <div className='hidden md:block w-3/4   h-[30rem] shadow-sm'>
+                <div className='md:flex-wrap w-3/4 h-[30rem] shadow-sm'>
                     {liveChatId !== '' ? <LiveChat /> : <SearchResultsPage source={'WatchPage'} />}
                 </div>
             </div>

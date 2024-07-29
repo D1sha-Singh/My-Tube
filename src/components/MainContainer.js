@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { YOUTUBE_VIDEOS_API } from '../utils/constants'
 import ButtontList from './ButtonList'
+import { useSelector } from 'react-redux'
 import VideoContainer from './VideoContainer'
 import { VideoContext } from '../utils/helpers';
 
 const MainContainer = () => {
   const [videos, setVideos] = useState([]);
+  const themeDark = useSelector(store => store?.theme?.themeDark)
   const value = { videos, setVideos }
 
   useEffect(() => {
@@ -20,8 +22,8 @@ const MainContainer = () => {
   }
   console.log(videos)
   return (
-    <div>
-    <VideoContext.Provider value={value} >
+    <div className={`grid grid-flow-row ${themeDark ? 'bg-black' : 'none'}`}>
+    <VideoContext.Provider value={value}>
       <ButtontList />
       <VideoContainer />
     </VideoContext.Provider>

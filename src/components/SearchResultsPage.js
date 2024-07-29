@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 export const SearchResultsPage = ({ source }) => {
   const searchResults = useSelector(store => store?.videos?.videos)
+  const themeDark = useSelector(store => store?.theme?.themeDark)
 
   const getTimeline = (publishTime) => {
 
@@ -24,7 +25,7 @@ export const SearchResultsPage = ({ source }) => {
                 className='rounded-lg'
                 alt="thumbnail" src={isSourceWatch() ? urlM : url} />
               <div className='flex flex-col px-2 md:gap-5'>
-                <h4 className='font-bold'>{title}</h4>
+                <h4 className={`font-bold ${themeDark ? 'text-white' : 'text-black'}`}>{title}</h4>
                 <div className='flex items-center text-xs font-semibold text-gray-500'>
                 <h5>{timeline}</h5>
                 <h3 className='font-medium py-2'>{channelTitle}</h3>
