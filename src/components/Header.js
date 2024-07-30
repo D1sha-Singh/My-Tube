@@ -9,6 +9,7 @@ import DarkMode from './DarkMode';
 
 const Header = () => {
     const [searchQuery, setSearchQuery] = useState("");
+    const [selectedFromSuggestions, setSelectedFromSuggestions] = useState(false)
     const [suggestions, setSuggestions] = useState([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const searchCache = useSelector(store => store.search)
@@ -40,23 +41,24 @@ const Header = () => {
         dispatch(toggleMenu())
     }
 
-    const getSearchResults = async () => {
+    const getSearchResults = useCallback(async () => {
         const data = await fetch(YOUTUBE_SEARCH_RESULT_API + searchQuery);
         const json = await data.json();
         dispatch(setVideos(json?.items ?? []));
         navigate(`results/?search_query=${searchQuery}`);
-    }
+        setSelectedFromSuggestions(false)
+    }, [dispatch, navigate, searchQuery])
+
+
 
     const handleClick = (item) => {
         setSearchQuery(item);
-        console.log('state 1 ', searchQuery)
-        getSearchResults();
+        setSelectedFromSuggestions(true)
     }
 
     useEffect(() => {
-        console.log('state 2 ', searchQuery)
-        getSearchResults();
-    }, [searchQuery])
+        selectedFromSuggestions === true && getSearchResults();
+    }, [selectedFromSuggestions, getSearchResults])
 
     return (
         <div className={`grid grid-flow-col p-2 fixed w-full shadow-lg ${themeDark ? 'bg-black shadow-lg shadow-red-500' : 'bg-white shadow-slate-600'}`}>
@@ -72,7 +74,7 @@ const Header = () => {
                 </Link>
             </div>
             <div className='col-span-10 px-10'>
-                <div >
+                <div>
                     <input
                         className='w-1/2 border border-gray-400 p-2 rounded-l-full'
                         value={searchQuery}
@@ -84,7 +86,7 @@ const Header = () => {
                         className="border border-gray-400 py-2 px-5 rounded-r-full bg-gray-100" onClick={getSearchResults}>🔍</button>
                 </div>
                 {showSuggestions &&
-                    <div className='absolute bg-white py-2 px-5 w-[37rem] shadow-lg rounded-lg border border-gray-500'>
+                    <div className='absolute bg-white py-2 px-5 w-[28rem] shadow-lg rounded-md border border-gray-500'>
                         <ul>
                             {suggestions.map((item, idx) =>
                             (

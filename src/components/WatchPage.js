@@ -18,9 +18,9 @@ const WatchPage = () => {
     }, [dispatch]);
 
     return (
-        <div className={`md:flex md:flex-wrap md:justify-center md:w-full mt-20 ${themeDark ? 'bg-black' : 'none'}`}>
+        <div className={`md:flex md:flex-wrap md:justify-center md:w-full h-fit mt-20 pt-10 ${themeDark ? 'bg-black' : 'none'}`}>
             <div className='px-5 flex'>
-                <div>
+                <div className='w-full h-fit'>
                     <iframe
                         width="1000"
                         height="500"
@@ -34,7 +34,7 @@ const WatchPage = () => {
                     </iframe>
                     {liveChatId === '' ? <CommentsContainer videoId={videoId} /> : null}
                 </div>
-                <div className='md:flex-wrap w-3/4 h-[30rem] shadow-sm'>
+                <div className='md:flex-wrap w-3/4 h-full shadow-sm'>
                     {liveChatId !== '' ? <LiveChat /> : <SearchResultsPage source={'WatchPage'} />}
                 </div>
             </div>

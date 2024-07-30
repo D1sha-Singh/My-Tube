@@ -26,7 +26,6 @@ const VideoContainer = () => {
   const getSearchResults = async (video) => {
     const data = await fetch(YOUTUBE_SEARCH_RESULT_API + video?.snippet?.tags?.[0]);
     const json = await data.json();
-    console.log('disha json ', json?.items)
     dispatch(setVideos(json?.items ?? []));
 }
 

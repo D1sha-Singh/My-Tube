@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom'
 const Sidebar = () => {
     const isMenuOpen = useSelector(store => store.app.isMenuOpen)
     const themeDark = useSelector(store => store?.theme?.themeDark)
-    
     if (!isMenuOpen) return null;
     
     return (
@@ -16,7 +15,7 @@ const Sidebar = () => {
                 <li>Videos</li>
                 <li>Live</li>
             </ul>
-            <h1 className='font-bold pt-5'>Subscriptions</h1>
+            <h1 className={`${themeDark ? 'text-white' : 'none'} font-bold pt-5`}>Subscriptions</h1>
             <ul className={`${themeDark ? 'text-white' : 'none'} mx-2`}>
                 <li>Music</li>
                 <li>Sports</li>
@@ -24,7 +23,7 @@ const Sidebar = () => {
                 <li>Movies</li>
             </ul>
             <br className='border border-gray-500 '/>
-            <h1 className='font-bold pt-5'>Watch Later</h1>
+            <h1 className={`${themeDark ? 'text-white' : 'none'} font-bold pt-5`}>Watch Later</h1>
             <ul className={`${themeDark ? 'text-white' : 'none'} mx-2`}>
                 <li>Music</li>
                 <li>Sports</li>
